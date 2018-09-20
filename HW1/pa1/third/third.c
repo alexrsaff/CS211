@@ -1,30 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//& obtains the address of a vairable
+#define LENGTH 10000
+//& obtains the address of a variable
 //*obtains the value of the thing a pointer is pointing to
 //www.pythontutor.com is useful
 struct node
 {
-	float data;
+	int data;
 	struct node* next;
 };
 
-int inList(float, struct node*);
+int inList(int, struct node*);
 
-struct node* add(float, struct node*);
+struct node* add(int, struct node*);
 
-struct node* delete(float, struct node*);
+struct node* delete(int, struct node*);
 
 void data_cleanup(struct node*);
 
 int main(int argc, char** argv)
 {
+	char action;
+	int key;
 	 if(argc != 2)
         return 0;
-	struct node* table[10000];
+	struct node* table[LENGTH];
 	memset(table,0,sizeof(table));
-	printf("LINE 25\n");
 	FILE *fp;
     fp = fopen(argv[1], "r");
 	if(fp==NULL)
@@ -32,10 +34,50 @@ int main(int argc, char** argv)
 		printf("error\n");
 		return 0;
 	}
+	int data;
+	struct node* start;
+	 while(fscanf(fp, "%c\t%d\n", &action, &data) == 2)
+    {
+		//printf("COMMAND: %c  |  DATA: %d\n", action,data);
+		key = data%LENGTH;
+		if(key<0)
+			key=key*-1;
+		start = table[key];
+		//printf("DATA: %d  |  KEY: %d\n",data,key);
+        if(action=='i')//add
+		{
+			if(start == NULL)
+			{
+				table[key] = malloc(sizeof(struct node));
+				(*table[key]).data = data;
+				(*table[key]).next = NULL;
+				printf("inserted\n");
+			}
+			else if (inList(data,start)==0)
+			{
+				start=add(data,start);
+				printf("inserted\n");
+			}
+			else if(inList(data,start)==1)
+				printf("duplicate\n");
+		}
+		else if(action=='s')//lookup
+		{
+			if(inList(data,start)==1)
+				printf("present\n");
+			else if(inList(data,start)==0)
+				printf("absent\n");
+		}
+		//printf("AT END\n");
+    }
+	//printf("\nCLEANING...\n");
+	for(int count = 0; count < LENGTH; count++)
+		if(table[count]!=NULL)
+			data_cleanup(table[count]);
 	return 0;
 }
 
-int inList(float data, struct node* start)
+int inList(int data, struct node* start)
 {
 	struct node* currpoint = start;
 	while(currpoint!=NULL)
@@ -47,7 +89,7 @@ int inList(float data, struct node* start)
 	return 0;
 }
 
-struct node* add(float data, struct node* start)
+struct node* add(int data, struct node* start)
 {
 	struct node* currpoint = start;
 	struct node* prevpoint = currpoint;
@@ -70,7 +112,7 @@ struct node* add(float data, struct node* start)
 	return start;
 }
 
-struct node* delete(float data, struct node* start)
+struct node* delete(int data, struct node* start)
 {
 	struct node* currpoint = start;
 	struct node* prevpoint = currpoint;
