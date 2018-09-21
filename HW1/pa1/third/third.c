@@ -23,15 +23,15 @@ int main(int argc, char** argv)
 {
 	char action;
 	int key;
-	 if(argc != 2)
-        return 0;
+	if(argc != 2)
+		return 0;
 	struct node* table[LENGTH];
 	memset(table,0,sizeof(table));
 	FILE *fp;
     fp = fopen(argv[1], "r");
 	if(fp==NULL)
 	{
-		printf("error\n");
+		//printf("error\n");
 		return 0;
 	}
 	int data;
