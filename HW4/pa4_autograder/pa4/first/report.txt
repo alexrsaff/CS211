@@ -1,0 +1,28 @@
+Alexander Saff      ars369      179000397
+
+I did the extra credit.
+
+My program uses a structure that consists of four longs.
+The longs are: tag, set, address, and age.
+Age holds time when the memory was last accessed (LRU)
+or when the memory was added (FIFO). The actual cache is
+represented by a 2D array where each column is a block,
+and each row is a set. I have two functions. One does
+input validation, and the other runs the cache simulation.
+I run the latter twice, once for non-prefetching and once
+for with-prefetching.I noticed that prefetching tends to
+increase the number of cache hits and memory reads, while
+decreasing the number of cache misses and keeping memory
+writes the same. This makes sense, as we were doing a
+write-through cache simulation, so every time a block of 
+memory was written to, main memory was written to as well,
+regardless of whether or not it was in the cache. It also
+makes sense that cache hits would rise with prefetching
+as it takes advantage of spacial locality. Cache hits 
+and misses are inversely related, so it makes sense that
+as cache hits increase, cache misses would decrease. Finally,
+it makes sense that memory reads would increase since every
+time a cache miss occurs, it has two opportunities to cause a
+memory read (once for the actual address, and once for its
+prefetched counterpart), while non-prefetching can only result
+in one memory read per miss.
